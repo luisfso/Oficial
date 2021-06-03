@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="icones">
+    <file>images/My-Documents-icon.ico</file>
+    <file>images/ok-icon.png</file>
+    <file>images/fechar.png</file>
+  </qresource>
+  <qresource prefix="avatar">
+    <file>images/ursinho.png</file>
+  </qresource>
+  <qresource prefix="Logo">
+    <file>images/unisa.png</file>
+  </qresource>
+</RCC>
