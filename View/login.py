@@ -9,20 +9,37 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from Controller import banco
+from Controller import banco
+
 
 class Ui_MainWindow(object):
     def check_campos(self):
         textoUsuario = ""
         textoSenha = ""
         if not self.lineEdit_usuario.text():
-                textUser = " Usuario vazio! "
+                textousuario = " Usuario vazio! "
         else:
-                textoUsuario = ""
+                textousuario = ""
         if not self.lineEdit_senha.text():
-                textoSenha = " Senha vazia " 
+                textoSenha = " Senha vazia! "
         else:
                 textoSenha = ""
 
+        if not (textousuario + textoSenha):
+                if self.checkBox.isChecked():
+                        teste = banco.validar_usuario(self.lineEdit_usuario.text(), self.lineEdit_senha.text())
+                        if not teste:
+                                self.label_erro.setText("Dados invalido!")
+                                self.frame_erro_login.show()
+                        else:
+                                self.frame_erro_login.hide()
+                else:
+                        self.label_erro.setText("Por favor, concorde com os termos!")
+                        self.frame_erro_login.show()
+        else:
+                self.label_erro.setText(textousuario+textoSenha)
+                self.frame_erro_login.show()
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -243,6 +260,8 @@ class Ui_MainWindow(object):
         self.pushButton_fechar_erro.clicked.connect(lambda: self.frame_erro_login.hide())       
         #frame erro começa oculto
         self.frame_erro_login.hide()
+        self.pushButton_acesso.clicked.connect(lambda: self.check_campos())
+
 
 
         self.retranslateUi(MainWindow)
@@ -257,7 +276,7 @@ class Ui_MainWindow(object):
         self.checkBox.setText(_translate("MainWindow", "Concorda com os Termos de Uso?"))
         self.pushButton_acesso.setText(_translate("MainWindow", "Acesso ao Estoque"))
         self.label.setText(_translate("MainWindow", "Desenvolvido por: Luis Fernando"))
-import recursos_rc
+from View import recursos_rc
 
 
 if __name__ == "__main__":
