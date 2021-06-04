@@ -8,13 +8,25 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import sys
 from Controller import banco
-from Controller import banco
-
+from View import view_estoque
+from Model import usuario
 
 class Ui_MainWindow(object):
+
+    """
+    def chamar_interface(self,objeto):
+        mostrar = usuario.Usuario(objeto[0][0],objeto[0][1],objeto[0][2],objeto[0][3])
+        print("-"*30)
+        print(mostrar.get_id())
+        print(mostrar.get_nome())
+        print(mostrar.get_senha())
+        print(mostrar.get_email())
+        banco.listar_produtos()
+"""
     def check_campos(self):
+
         textoUsuario = ""
         textoSenha = ""
         if not self.lineEdit_usuario.text():
@@ -25,15 +37,20 @@ class Ui_MainWindow(object):
                 textoSenha = " Senha vazia! "
         else:
                 textoSenha = ""
-
-        if not (textousuario + textoSenha):
+        if True:
+        #if not (textousuario + textoSenha):
                 if self.checkBox.isChecked():
-                        teste = banco.validar_usuario(self.lineEdit_usuario.text(), self.lineEdit_senha.text())
+                        #teste = banco.validar_usuario(self.lineEdit_usuario.text(), self.lineEdit_senha.text())
+                        teste = banco.validar_usuario("unisa", "unisa123")
                         if not teste:
                                 self.label_erro.setText("Dados invalido!")
                                 self.frame_erro_login.show()
                         else:
                                 self.frame_erro_login.hide()
+                                #self.chamar_interface(teste)
+                                return False
+
+
                 else:
                         self.label_erro.setText("Por favor, concorde com os termos!")
                         self.frame_erro_login.show()
@@ -42,6 +59,10 @@ class Ui_MainWindow(object):
                 self.frame_erro_login.show()
 
     def setupUi(self, MainWindow):
+
+
+
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowModality(QtCore.Qt.NonModal)
         MainWindow.resize(547, 700)
@@ -262,6 +283,11 @@ class Ui_MainWindow(object):
         self.frame_erro_login.hide()
         self.pushButton_acesso.clicked.connect(lambda: self.check_campos())
 
+        #função do botão de acesso
+        ###função do botao acesso
+
+        ###
+
 
 
         self.retranslateUi(MainWindow)
@@ -287,3 +313,4 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+

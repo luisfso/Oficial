@@ -1,5 +1,13 @@
 import mysql.connector
 from hashlib import md5
+from Model.usuario import Usuario
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="estoque"
+)
 #     usuarios cadastrados
 ##    hashlib.md5(b"unisa123").hexdigest()
 ##    hashlib.md5(b"professora123").hexdigest()
@@ -48,30 +56,48 @@ from hashlib import md5
 ####
         self.mydb.close()
 '''
-def validar_usuario(usuario, senha):
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=""
-    )
+def inserir_novo(nome,valor,quantidade):
+    global mydb
     mycursor = mydb.cursor()
-    user = usuario
-    password = md5(str(senha).encode()).hexdigest()
-    print(password)
     try:
-        print("SELECT id,username,`password`,email FROM `estoque`.`estoque_contas` WHERE username = \""+user+"\" AND `password` = \""+password+"\";")
-        mycursor.execute("SELECT id,username,`password`,email FROM `estoque`.`estoque_contas` WHERE username = \""+user+"\" AND `password` = \""+password+"\";")
+        print("SELECT id,nome,valor,estoque FROM `estoque_produtos` WHERE username = \"" + str(nome) +"\";")
+        mycursor.execute("SELECT id,nome,valor,estoque FROM `estoque_produtos` WHERE nome = \"" + str(nome) +"\";")
+        result = mycursor.fetchmany(size=1)
+        print(result)
+        if result:
+            print("entrou")
+            return False
+        else:
+            print("não entrou entrou")
+            query = "INSERT INTO `estoque_produtos` (`nome`, `valor`, `estoque`) VALUES ( \"<{nome: }>\", \"<{valor: }>\", \"<{estoque: }>\");"
+            print(query.replace("<{nome: }>", str(nome)).replace("<{valor: }>", str(valor)).replace("<{estoque: }>",str(int(quantidade))))
+            mycursor.execute(query.replace("<{nome: }>",str(nome)).replace("<{valor: }>",str(valor)).replace("<{estoque: }>",str(int(quantidade))))
+
+    except:
+        print("erro de acesso ao banco")
+    mydb.commit()
+
+def validar_usuario(username, senha):
+    global mydb
+    mycursor = mydb.cursor()
+    user = username
+    password = md5(str(senha).encode()).hexdigest()
+    #print(password)
+    try:
+        mycursor.execute("SELECT id,username,`password`,email FROM `estoque_contas` WHERE username = \""+user+"\" AND `password` = \""+password+"\";")
         result = mycursor.fetchmany(size=1)
         if not result:
             return(False)
-
+        """
         for i in result:
             id = i[0]
-            usuario = i[1]
+            nome = i[1]
             senha = i[2]
             email = i[3]
-            print(id, usuario, senha, email)
-        return(True)
+            print(id, nome, senha, email)
+            #quemestalogado = Usuario(id,nome,senha,email)
+        """
+        return(result)
     except:
         print('Error:Nao foi possivel ler o banco.')
 
@@ -94,4 +120,29 @@ def validar_usuario(usuario, senha):
        print('Error:Nao foi possivel ler o banco.') 
 
     '''
+    mydb.close()
+def listar_produtos():
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="estoque"
+    )
+
+    try:
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT id,nome,valor,estoque FROM `estoque_produtos`;")
+        result = mycursor.fetchall()
+
+        if not result:
+            return(False)
+
+        for i in result:
+            id = i[0]
+            nome = i[1]
+            valor = i[2]
+            estoque = i[3]
+        return(list(result))
+    except:
+        print('Error:Nao foi possivel ler o banco.')
     mydb.close()
