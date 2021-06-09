@@ -1,0 +1,60 @@
+CREATE DATABASE IF NOT EXISTS estoque;
+CREATE  TABLE IF NOT EXISTS `estoque`.`estoque_produtos` (
+  `id_prod` bigint  auto_increment ,
+  `nome` VARCHAR(150) NOT NULL ,
+  `valor` VARCHAR(100) ,
+  `estoque` int ,
+  PRIMARY KEY (`id_prod`) )
+ENGINE = InnoDB;
+
+CREATE  TABLE IF NOT EXISTS `estoque`.`estoque_contas` (
+  `id_user` bigint  auto_increment ,
+  `username` VARCHAR(150) NOT NULL ,
+  `password` VARCHAR(100) ,
+  `email` varchar(150),
+  PRIMARY KEY (`id_user`) )
+ENGINE = InnoDB;
+
+INSERT INTO `estoque`.`estoque_contas`
+(`id_user`,
+`username`,
+`password`,
+`email`)
+VALUES
+('1',
+'unisa',
+'978d49fe29f770fdc1426ace2980efb7',
+'unisa@unisa.br');
+
+INSERT INTO `estoque`.`estoque_produtos`
+(
+`nome`,
+`valor`,
+`estoque`)
+VALUES
+(
+'Caderno',
+'R$ 10,30',
+'100');
+
+INSERT INTO `estoque`.`estoque_produtos`
+(
+`nome`,
+`valor`,
+`estoque`)
+VALUES
+(
+'Caneta',
+'R$ 3,10',
+'23');
+
+INSERT INTO `estoque`.`estoque_produtos`
+(
+`nome`,
+`valor`,
+`estoque`)
+VALUES
+(
+'Borracha',
+'R$ 0,70',
+'1035');

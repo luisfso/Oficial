@@ -10,9 +10,47 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Controller import banco
 import sys
+from Model import usuario
 
 
 class Ui_MainWindow(object):
+    def inc(self):
+        nome = self.tableWidget.takeItem(self.tableWidget.currentRow(),1).text()
+        banco.imcrementar_estoque(nome)
+        self.montar_grid()
+    def excluir_item(self):
+        print("#"*10000)
+        id = self.tableWidget.takeItem(self.tableWidget.currentRow(),0).text()
+        print(id)
+        banco.excluir_chave(id)
+        self.montar_grid()
+
+    def inserir_modificação(self):
+        if self.tableWidget.currentRow():
+            self.lineEdit.setText(self.tableWidget.takeItem(self.tableWidget.currentRow(),1).text())
+            self.lineEdit_2.setText(self.tableWidget.takeItem(self.tableWidget.currentRow(), 2).text())
+            self.lineEdit_3.setText(self.tableWidget.takeItem(self.tableWidget.currentRow(), 3).text())
+            self.pushButton.setText("Atualizar")
+            self.frame_Inserir.show()
+            print("função modificar")
+            if self.pushButton.text() == "Atualizar":
+                self.pushButton.clicked.connect(lambda: self.inserir_atualizar())
+        else:
+            "Por favor selecione um item"
+        self.montar_grid()
+
+
+    def botao_atualizar(self):
+        nome = self.lineEdit.text()
+        valor = self.lineEdit_2.text()
+        quantidade = self.lineEdit_3.text()
+        banco.inserir_novo(nome,valor,quantidade)
+        self.frame_Inserir.hide()
+        self.montar_grid()
+    def limpar_campos(self):
+        self.lineEdit.setText("")
+        self.lineEdit_2.setText("")
+        self.lineEdit_3.setText("")
     def inserir_novo(self):
         nome = self.lineEdit.text()
         valor = self.lineEdit_2.text()
@@ -21,23 +59,31 @@ class Ui_MainWindow(object):
         self.frame_Inserir.hide()
         self.montar_grid()
 
+    def inserir_atualizar(self):
+        nome = self.lineEdit.text()
+        valor = self.lineEdit_2.text()
+        quantidade = self.lineEdit_3.text()
+        banco.inserir_atualizar(nome, valor, quantidade)
+        self.frame_Inserir.hide()
+        self.montar_grid()
+
     def montar_grid(self):
-       self.lineEdit.setText("")
-       self.lineEdit_2.setText("")
-       self.lineEdit_3.setText("")
-       try:
-            total = banco.listar_produtos()
-            linhas = len(total)
-            self.tableWidget.setRowCount(len(total))
-            self.tableWidget.setColumnCount(4)
+#       self.frame_Inserir.hide()
+        #self.label_4.setText(str(count))
+        #self.label_5.setText(str(estoquetotal))
+        try:
+                total = banco.listar_produtos()
+                linhas = len(total)
+                self.tableWidget.setRowCount(len(total))
+                self.tableWidget.setColumnCount(4)
 
-            for i in range(0, linhas):
-                for j in range(0, 4):
-                    item = QtWidgets.QTableWidgetItem(str(total[i][j]))
-                    self.tableWidget.setItem(i, j, item)
+                for i in range(0, linhas):
+                    for j in range(0, 4):
+                        item = QtWidgets.QTableWidgetItem(str(total[i][j]))
+                        self.tableWidget.setItem(i, j, item)
 
-       except:
-           print(print("Unexpected error:", sys.exc_info()[0]))
+        except:
+               print(print("Unexpected error:", sys.exc_info()[0]))
 
 
     def setupUi(self, MainWindow):
@@ -153,7 +199,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_central)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.tableWidget = QtWidgets.QTableWidget(self.frame_central)
-        self.tableWidget.setStyleSheet("background-color: rgb(117, 80, 123);")
+        self.tableWidget.setStyleSheet("background-color: rgb(173, 127, 168);")
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(4)
         self.tableWidget.setRowCount(0)
@@ -380,7 +426,17 @@ class Ui_MainWindow(object):
         self.montar_grid()
         self.frame_Inserir.hide()
         self.pushButton_inserir_novo.clicked.connect(lambda: self.frame_Inserir.show())
-        self.pushButton.clicked.connect(self.inserir_novo)
+        self.pushButton_atualizat.clicked.connect(lambda: self.inserir_modificação())
+        self.pushButton.clicked.connect(lambda: self.inserir_novo)
+        self.pushButton_excluir.clicked.connect(lambda: self.excluir_item())
+        self.pushButton_aumentar_estoque.clicked.connect(lambda: self.inc())
+        self.pushButton.clicked.connect(lambda: self.inserir_novo())
+
+
+
+
+
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -410,7 +466,30 @@ class Ui_MainWindow(object):
         self.pushButton_inserir_novo.setText(_translate("MainWindow", "Inserir Novo"))
         self.pushButton_atualizat.setText(_translate("MainWindow", "Atualizar"))
         self.pushButton_excluir.setText(_translate("MainWindow", "Excluir"))
-        self.pushButton_aumentar_estoque.setText(_translate("MainWindow", "Incrementar"))
+        self.pushButton_aumentar_estoque.setText(_translate("MainWindow", "Decrementar"))
+        f = open('test.txt', 'r')
+        var = f.read()
+        f.close()
+        print("#"*10000)
+        print(var)
+        userr = banco.obter_dados(var)
+        user = usuario.Usuario(userr[0][0],userr[0][1],"",userr[0][2])
+        print(user.get_nome())
+        print("#"*10000)
+        self.label_usuario.setText("Usuário: "+user.get_nome())
+        self.label_email.setText("Email: "+user.get_email())
+        produtos = banco.listar_produtos()
+        print(produtos)
+        count = 0
+        estoquetotal = 0
+        for i in produtos:
+            count =count +1
+            estoquetotal = estoquetotal + int(i[3])
+        print(count)
+        print(estoquetotal)
+        self.label_4.setText(str(count))
+        self.label_5.setText(str(estoquetotal))
+
 from View import recursos_rc
 
 

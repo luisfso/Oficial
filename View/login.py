@@ -37,11 +37,11 @@ class Ui_MainWindow(object):
                 textoSenha = " Senha vazia! "
         else:
                 textoSenha = ""
-        if True:
-        #if not (textousuario + textoSenha):
+        #if True:
+        if not (textousuario + textoSenha):
                 if self.checkBox.isChecked():
-                        #teste = banco.validar_usuario(self.lineEdit_usuario.text(), self.lineEdit_senha.text())
-                        teste = banco.validar_usuario("unisa", "unisa123")
+                        teste = banco.validar_usuario(self.lineEdit_usuario.text(), self.lineEdit_senha.text())
+                        #teste = banco.validar_usuario("unisa", "unisa123")
                         if not teste:
                                 self.label_erro.setText("Dados invalido!")
                                 self.frame_erro_login.show()
@@ -282,6 +282,8 @@ class Ui_MainWindow(object):
         #frame erro começa oculto
         self.frame_erro_login.hide()
         self.pushButton_acesso.clicked.connect(lambda: self.check_campos())
+        #self.lineEdit_usuario.setText("unisa")
+        #self.lineEdit_senha.setText("unisa123")
 
         #função do botão de acesso
         ###função do botao acesso

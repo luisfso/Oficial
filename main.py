@@ -29,6 +29,9 @@ def main():
 
 
 def segundatela(var):
+    f = open('test.txt', 'w')
+    f.write(var[0][1])
+    f.close()
     global app
     print("--"*40)
     print("--"*40)
@@ -47,7 +50,6 @@ def segundatela(var):
 
 def aff():
     print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-
 
 main()
 

@@ -1,5 +1,6 @@
 from View import login
 from PyQt5 import QtWidgets
+
 class Usuario:
     def __init__(self, id,nome,senha,email):
         self.id = id
